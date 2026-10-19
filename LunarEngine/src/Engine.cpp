@@ -1,5 +1,7 @@
 #include "Lunar/Engine.h"
 #include "Lunar/Module.h"
+#include "Lunar/InternalLogging.h"
+//#include "Lunar/Components/Logger.h"
 
 #include <iostream>
 
@@ -17,7 +19,7 @@ namespace Lunar
 
     void Engine::Run()
     {
+        LunarSystems::InternalLogging::Init();
         LunarSystems::RunModuleTest();
-        std::cout << "[LunarEngine] Running\n";
     }
 }

@@ -8,6 +8,9 @@ Application::~Application() {delete p_EngineInstance;}
 
 void Application::Start()
 {
+    
+    
+    
     std::cout << "Application Loading." << std::endl;
     p_EngineInstance->Run();
     

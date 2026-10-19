@@ -8,7 +8,6 @@
 #include <typeinfo>
 #include <string>
 #include <map>
-
 #include <iostream>
 #include <stdio.h>
 
@@ -35,15 +34,14 @@ namespace LunarSystems
         
         template<typename T>
         static std::string GetModuleName();
+        
         //Utils
         static void LibrarySwitchVerboseErrorLoggingMode(bool p_AllowVerbose = false);
         
     private:
         template<typename T>
         static std::map<std::string, ModuleBase*>::iterator ScanForModule();
-        
         static ModuleBase* GrabModule(std::map<std::string, ModuleBase*>::iterator p_ModuleID);
-        
         static inline std::map<std::string, ModuleBase*> m_Modules = {};
     };
     

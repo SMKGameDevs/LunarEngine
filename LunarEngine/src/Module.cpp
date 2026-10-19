@@ -3,6 +3,7 @@ Origin date: Sept 24, 2026
 --- File Start --- */
 
 #include "Lunar/Module.h"
+#include "Lunar/InternalLogging.h"
 
 using namespace LunarSystems;
 
@@ -12,11 +13,14 @@ void ModuleLibrary::Init() {m_Modules.emplace(typeid(ModuleLibrary).name(), null
 void ModuleLibrary::PushToLibrary(ModuleBase* p_Module, const std::string& p_TypeInfo)
 {
     /*TODO ADD SCAN CONDITION*/
+    TRACE("ModuleLib::PushMessage", "Emplace into buffer");
     m_Modules.emplace(p_TypeInfo, p_Module);
     
+    int i = 0;
     for (auto Module : m_Modules)
-    {
-        std::cout << "PUSH: " << Module.first << " " << Module.second << std::endl;
+    { 
+        
+        TRACE(m_Modules, "<- Module Stack: " + Module.first);
     }
 }
 
@@ -29,7 +33,7 @@ void ModuleLibrary::PopFromLibrary(ModuleBase* p_ModuleBase, const std::string& 
 template<typename T>
 T* ModuleLibrary::GetModule()
 {
-    //std::cout << typeid(T).name() << std::endl;
+    TRACE("ModuleLib::GetModule", "Scanning for module of type: " + (std::string)typeid(T).name());
     auto Iter = ScanForModule<T>();
     return static_cast<T*>(GrabModule(Iter));
 }
@@ -37,7 +41,7 @@ T* ModuleLibrary::GetModule()
 template<typename T>
 std::string ModuleLibrary::GetModuleName()
 {
-    std::cout << "NAME: " << typeid(T).name() << std::endl;
+    TRACE("MoudleLib::GetModuleName", "Got Name: " + (std::string)typeid(T).name());
     return typeid(T).name();
 }
 int ModuleLibrary::ShutdownLibrary() {return 0;}
@@ -88,18 +92,18 @@ Module<T>::~Module()
 
 void LunarSystems::RunModuleTest()
 {
-    std::cout << "Starting Module Test." << std::endl;
+    INFO("ModuleLib::SystemTest", "Initializing System Test");
         
     ModuleLibrary::Init();
-    if (ModuleLibrary::GetModule<TestModule>() != nullptr) {std::cout << "ModuleLibrary init failed." << std::endl;}
+    if (ModuleLibrary::GetModule<TestModule>() != nullptr) {ERROR("ModuleLib::SystemTest", "ModuleLib init failed");}
         
     TestModule* tMod = new TestModule("awawa");
-    if (ModuleLibrary::GetModule<TestModule>() == nullptr) {std::cout << "ModuleLibrary Push failed." << std::endl;}
-    if (ModuleLibrary::GetModule<TestModule>() == tMod) {std::cout << "ModuleLibrary Push Sync." << std::endl;}
+    if (ModuleLibrary::GetModule<TestModule>() == nullptr) {WARN("ModuleLib::SystemTest", "ModuleLibrary Push failed."); }
+    if (ModuleLibrary::GetModule<TestModule>() == tMod) {INFO("ModuleLib::SystemTest", "ModuleLibrary Push Sync.");}
     
     ModuleLibrary::GetModule<TestModule>()->PrintName();
     delete tMod;
-    if (ModuleLibrary::GetModule<TestModule>() != nullptr) {std::cout << "ModuleLibrary Delete failed." << std::endl;}
+    if (ModuleLibrary::GetModule<TestModule>() != nullptr) {ERROR("ModuleLib::SystemTeest", "ModuleLibrary Delete failed.");}
         
     ModuleLibrary::ShutdownLibrary();
 }

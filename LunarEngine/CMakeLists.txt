@@ -4,6 +4,7 @@ file(GLOB_RECURSE LUNARENGINE_SOURCES CONFIGURE_DEPENDS
 
 add_library(LunarEngine SHARED
     ${LUNARENGINE_SOURCES}
+    Utils/PointerUtils.h
 )
 add_library(Lunar::Engine ALIAS LunarEngine)
 
